@@ -246,7 +246,7 @@ def get_config_h_filename():
         else:
             inc_dir = _sys_home or project_base
     else:
-        inc_dir = get_python_inc(plat_specific=1)
+        inc_dir = get_python_inc(plat_specific=0)
 
     return os.path.join(inc_dir, 'pyconfig.h')
 
