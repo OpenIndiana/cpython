@@ -462,7 +462,7 @@ DTRACE_DEPS = \
 # Default target
 all:		@DEF_MAKE_ALL_RULE@
 build_all:	check-clean-src $(BUILDPYTHON) oldsharedmods sharedmods gdbhooks \
-		Programs/_testembed python-config
+		Programs/_testembed python-config build-py_db
 
 # Check that the source is clean when building out of source.
 check-clean-src:
@@ -706,6 +706,15 @@ Makefile Modules/config.c: Makefile.pre \
 	@mv config.c Modules
 	@echo "The Makefile was updated, you may need to re-run make."
 
+SHLIB_FLAGS = -shared -fpic
+
+libpython$(LDVERSION)_db.so.1.0:        $(srcdir)/py_db/libpython35_db.c
+	$(CC) -o $@ $(CFLAGS) $(PY_CPPFLAGS) $(CPPFLAGS) $(SHLIB_FLAGS) $<
+
+build-py_db:   libpython$(LDVERSION)_db.so.1.0
+
+install-py_db: libpython$(LDVERSION)_db.so.1.0
+	$(INSTALL_SHARED) libpython$(LDVERSION)_db.so.1.0 $(DESTDIR)$(LIBDIR)
 
 Modules/Setup: $(srcdir)/Modules/Setup.dist
 	@if test -f Modules/Setup; then \
@@ -1129,7 +1138,7 @@ multisslcompile: build_all
 multissltest: build_all
 	$(RUNSHARED) ./$(BUILDPYTHON) Tools/ssl/multissltests.py
 
-install: @FRAMEWORKINSTALLFIRST@ commoninstall bininstall maninstall @FRAMEWORKINSTALLLAST@
+install: @FRAMEWORKINSTALLFIRST@ commoninstall bininstall maninstall install-py_db @FRAMEWORKINSTALLLAST@
 	if test "x$(ENSUREPIP)" != "xno"  ; then \
 		case $(ENSUREPIP) in \
 			upgrade) ensurepip="--upgrade" ;; \
