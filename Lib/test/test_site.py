@@ -503,6 +503,8 @@ class ImportSideEffectTests(unittest.TestCase):
 
 class StartupImportTests(unittest.TestCase):
 
+    @unittest.skipIf(sys.platform.startswith("sunos"),
+                     "test doesn't work well on sparc Solaris")
     def test_startup_imports(self):
         # This tests checks which modules are loaded by Python when it
         # initially starts upon startup.

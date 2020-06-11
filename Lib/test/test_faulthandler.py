@@ -720,6 +720,7 @@ class FaultHandlerTests(unittest.TestCase):
     def test_register_threads(self):
         self.check_register(all_threads=True)
 
+    @unittest.skipIf(sys.platform.startswith("sunos"), "sometimes fails on Solaris")
     def test_register_chain(self):
         self.check_register(chain=True)
 
