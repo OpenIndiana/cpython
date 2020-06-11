@@ -45,6 +45,8 @@ if gdb_major_version < 7:
                             "embedding. Saw %s.%s:\n%s"
                             % (gdb_major_version, gdb_minor_version,
                                gdb_version))
+if sys.platform.startswith("sunos"):
+    raise unittest.SkipTest("test doesn't work well on Solaris")
 
 if not sysconfig.is_python_build():
     raise unittest.SkipTest("test_gdb only works on source builds at the moment.")

@@ -397,6 +397,8 @@ class StructureTestCase(unittest.TestCase):
                          (1, 0, 0, 0, 0, 0))
         self.assertRaises(TypeError, lambda: Z(1, 2, 3, 4, 5, 6, 7))
 
+    @unittest.skipIf(sys.platform.startswith("sunos"),
+                     "test doesn't work well on sparc Solaris")
     def test_pass_by_value(self):
         # This should mirror the structure in Modules/_ctypes/_ctypes_test.c
         class X(Structure):

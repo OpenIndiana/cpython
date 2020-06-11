@@ -583,9 +583,9 @@ class TestLocale(unittest.TestCase):
 
     def test_bug_3061(self):
         try:
-            tmp = locale.setlocale(locale.LC_ALL, "fr_FR")
+            tmp = locale.setlocale(locale.LC_ALL, "fr_FR.UTF-8")
         except locale.Error:
-            self.skipTest('could not set locale.LC_ALL to fr_FR')
+            self.skipTest('could not set locale.LC_ALL to fr_FR.UTF-8')
         # This should not cause an exception
         time.strftime("%B", (2009,2,1,0,0,0,0,0,0))
 
@@ -626,7 +626,7 @@ class _TestStrftimeYear:
             self.test_year('%04d', func=year4d)
 
     def skip_if_not_supported(y):
-        msg = "strftime() is limited to [1; 9999] with Visual Studio"
+        msg = "strftime() is limited to [1; 9999] on %s" % sys.platform
         # Check that it doesn't crash for year > 9999
         try:
             time.strftime('%Y', (y,) + (0,) * 8)

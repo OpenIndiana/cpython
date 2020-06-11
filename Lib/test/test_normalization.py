@@ -36,6 +36,8 @@ def unistr(data):
 
 class NormalizationTest(unittest.TestCase):
     def test_main(self):
+        if sys.platform.startswith("sunos"):
+            self.skipTest("test doesn't work well on Solaris")
         # Hit the exception early
         try:
             testdata = open_urlresource(TESTDATAURL, encoding="utf-8",
