@@ -2776,6 +2776,7 @@ sock_setsockopt(PySocketSockObject *s, PyObject *args)
     int optname;
     int res;
     Py_buffer optval;
+    int buflen;
     int flag;
     unsigned int optlen;
     PyObject *none;
@@ -2798,8 +2799,15 @@ sock_setsockopt(PySocketSockObject *s, PyObject *args)
     /* setsockopt(level, opt, flag) */
     if (PyArg_ParseTuple(args, "iii:setsockopt",
                          &level, &optname, &flag)) {
+
+        buflen = sizeof flag;
+        /* Multi cast options take shorter arguments */
+        if (optname == IP_MULTICAST_TTL
+            || optname == IP_MULTICAST_LOOP)
+                buflen = sizeof(u_char);
+
         res = setsockopt(s->sock_fd, level, optname,
-                         (char*)&flag, sizeof flag);
+                         (char*)&flag, buflen);
         goto done;
     }
 
