@@ -58,6 +58,19 @@ def setup_tests(ns):
         if getattr(module, '__file__', None):
             module.__file__ = os.path.abspath(module.__file__)
 
+    # The socket test goes crazy on Solaris, slurping up VM until the system
+    # dies or the test is killed.  So limit it to 8GB.  While we could do this
+    # in the socket test itself, it is more prudent to do it here in case any
+    # other tests ever go crazy in a similar fashion.
+    if sys.platform == 'sunos5':
+        try:
+            import resource
+        except ImportError:
+            pass
+        else:
+            vm_limit = 8589934592
+            resource.setrlimit(resource.RLIMIT_VMEM, (vm_limit, vm_limit))
+
     if ns.huntrleaks:
         unittest.BaseTestSuite._cleanup = False
 
