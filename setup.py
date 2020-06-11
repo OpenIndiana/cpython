@@ -1651,6 +1651,22 @@ class PyBuildExt(build_ext):
             exts.append( Extension('dlpi', ['dlpimodule.c'],
                                    libraries = ['dlpi']) )
 
+        # privileges module (Solaris)
+        priv_inc = find_file('priv.h', [], inc_dirs)
+        if priv_inc is not None:
+            exts.append( Extension('privileges', ['privileges.c']))
+
+        # rbac module (Solaris)
+        secdb_inc = find_file('secdb.h', [], inc_dirs)
+        aa_inc = find_file('auth_attr.h', [], inc_dirs)
+        ea_inc = find_file('exec_attr.h', [], inc_dirs)
+        ua_inc = find_file('user_attr.h', [], inc_dirs)
+        if secdb_inc is not None and aa_inc is not None and \
+            ea_inc is not None and ua_inc is not None:
+            exts.append( Extension('rbac', ['pyrbac.c', 'authattr.c', \
+                                   'execattr.c', 'userattr.c'],
+                                   libraries = ['nsl', 'socket', 'secdb']) )
+
         # Thomas Heller's _ctypes module
         self.detect_ctypes(inc_dirs, lib_dirs)
 
