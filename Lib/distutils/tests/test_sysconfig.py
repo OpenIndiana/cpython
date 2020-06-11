@@ -127,10 +127,10 @@ class SysconfigTestCase(support.EnvironGuard, unittest.TestCase):
         self.assertEqual(comp.exes['preprocessor'],
                          'env_cpp --env-cppflags')
         self.assertEqual(comp.exes['compiler'],
-                         'env_cc --sc-cflags --env-cflags --env-cppflags')
+                         'env_cc --sc-cflags --env-cflags --env-cppflags -KPIC -DPIC')
         self.assertEqual(comp.exes['compiler_so'],
                          ('env_cc --sc-cflags '
-                          '--env-cflags ''--env-cppflags --sc-ccshared'))
+                          '--env-cflags ''--env-cppflags -KPIC -DPIC --sc-ccshared'))
         self.assertEqual(comp.exes['compiler_cxx'],
                          'env_cxx --env-cxx-flags')
         self.assertEqual(comp.exes['linker_exe'],
@@ -156,9 +156,9 @@ class SysconfigTestCase(support.EnvironGuard, unittest.TestCase):
         self.assertEqual(comp.exes['preprocessor'],
                          'sc_cc -E')
         self.assertEqual(comp.exes['compiler'],
-                         'sc_cc --sc-cflags')
+                         'sc_cc --sc-cflags -KPIC -DPIC')
         self.assertEqual(comp.exes['compiler_so'],
-                         'sc_cc --sc-cflags --sc-ccshared')
+                         'sc_cc --sc-cflags -KPIC -DPIC --sc-ccshared')
         self.assertEqual(comp.exes['compiler_cxx'],
                          'sc_cxx')
         self.assertEqual(comp.exes['linker_exe'],
