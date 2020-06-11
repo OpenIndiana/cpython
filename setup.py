@@ -1638,6 +1638,13 @@ class PyBuildExt(build_ext):
         # Stefan Krah's _decimal module
         exts.append(self._decimal_ext())
 
+        # ucred module (Solaris)
+        ucred_inc = find_file('ucred.h', [], inc_dirs)
+        tsol_inc = find_file('tsol/label.h', [], inc_dirs)
+        if ucred_inc is not None and tsol_inc is not None:
+            exts.append( Extension('ucred', ['ucred.c'],
+                                   libraries = ['tsol']) )
+
         # Thomas Heller's _ctypes module
         self.detect_ctypes(inc_dirs, lib_dirs)
 
