@@ -301,6 +301,10 @@ class socket(_socket.socket):
                         blocksize = count - total_sent
                         if blocksize <= 0:
                             break
+                    # Sendfile on Solaris can raise EINVAL if offset >= size of the file.
+                    # In that case don't call it at all.
+                    elif offset >= fsize:
+                        break;
                     try:
                         sent = os_sendfile(sockno, fileno, offset, blocksize)
                     except BlockingIOError:
