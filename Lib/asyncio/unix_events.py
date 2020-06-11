@@ -356,6 +356,12 @@ class _UnixSelectorEventLoop(selector_events.BaseSelectorEventLoop):
                 self._sock_sendfile_update_filepos(fileno, offset, total_sent)
                 fut.set_result(total_sent)
                 return
+        # Sendfile on Solaris can raise EINVAL if offset >= size of the file.
+        # In that case don't call it at all.
+        elif offset >= blocksize:
+            self._sock_sendfile_update_filepos(fileno, offset, total_sent)
+            fut.set_result(total_sent)
+            return
 
         try:
             sent = os.sendfile(fd, fileno, offset, blocksize)
