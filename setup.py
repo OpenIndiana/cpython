@@ -1645,6 +1645,12 @@ class PyBuildExt(build_ext):
             exts.append( Extension('ucred', ['ucred.c'],
                                    libraries = ['tsol']) )
 
+        # dlpi module (Solaris)
+        dlpi_inc = find_file('libdlpi.h', [], inc_dirs)
+        if dlpi_inc is not None:
+            exts.append( Extension('dlpi', ['dlpimodule.c'],
+                                   libraries = ['dlpi']) )
+
         # Thomas Heller's _ctypes module
         self.detect_ctypes(inc_dirs, lib_dirs)
 
